@@ -1,39 +1,24 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import generics
 
 from .models import Empresa, Administrator
-from .serializers import EmpresaSerializer, AdministratorSerializer
+from .serializers import AdministratorSerializer, EmpresaSerializer
 
 
-class EmpresaAPIView(APIView):
-    """
-    API das empresas cadastradas
-    """
-    def get(self, request):
-        empresas = Empresa.objects.all()
-        serializer = EmpresaSerializer(empresas, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = EmpresaSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+class AdministratorsAPIView(generics.ListCreateAPIView):
+    queryset = Administrator.objects.all()
+    serializer_class = AdministratorSerializer
 
 
-class AdministratorAPIView(APIView):
-    """
-    API de clientes relacionados
-    """
-    def get(self, request):
-        administrators = Administrator.objects.all()
-        serializer = AdministratorSerializer(administrators, many=True)
-        return Response(serializer.data)
+class AdministratorAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Administrator.objects.all()
+    serializer_class = AdministratorSerializer
 
-    def post(self, request):
-        serializer = AdministratorSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class EmpresasAPIView(generics.ListCreateAPIView):
+    queryset = Empresa.objects.all()
+    serializer_class = EmpresaSerializer
+
+
+class EmpresaAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Empresa.objects.all()
+    serializer_class = EmpresaSerializer

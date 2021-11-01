@@ -7,7 +7,6 @@ class AdministratorSerializer(serializers.ModelSerializer):
 
     class Meta:
         extra_kwargs = {
-            'email': {'write_only': True},
             'senha': {'write_only': True}
         }
         model = Administrator
